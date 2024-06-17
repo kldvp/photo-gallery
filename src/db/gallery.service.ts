@@ -1,31 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import * as Loki from 'lokijs';
+// import * as Loki from 'lokijs';
 import { v4 as uuidv4 } from 'uuid';
+import * as _ from 'lodash';
 
-const db = new Loki('data.db', { persistenceMethod: 'memory' });
-const gallery = db.addCollection('gallery', { disableMeta: true });
+// const db = new Loki('data.db', { persistenceMethod: 'memory' });
+// const gallery = db.addCollection('gallery', { disableMeta: true });
+
+const db = { gallery: [] };
+const gallery = db.gallery;
 
 @Injectable()
 export class GalleryService {
   constructor() {}
 
   findAll() {
-    const listUsers = gallery.find({});
-    return listUsers;
+    return gallery;
   }
 
   find(condition: object) {
-    return gallery.find(condition);
+    const values = _.filter(gallery, condition);
+    return values;
+  }
+
+  findOne(condition: object) {
+    return _.find(gallery, condition);
   }
 
   add(record: any) {
     record.id = uuidv4();
-    const rec = gallery.insert(record);
-    return rec;
-  }
-
-  remove(id: string) {
-    gallery.remove({ id });
-    return true;
+    gallery.push(record);
+    return record;
   }
 }
