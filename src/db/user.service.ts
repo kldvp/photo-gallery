@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as Loki from 'lokijs';
 import { v4 as uuidv4 } from 'uuid';
 
-const db = new Loki('data.db');
+const db = new Loki('data.db', { persistenceMethod: 'memory' });
 const users = db.addCollection('users', { disableMeta: true });
 
 @Injectable()
