@@ -3,8 +3,16 @@ import { v4 as uuidv4 } from 'uuid';
 import * as _ from 'lodash';
 
 // in memory db
-const db = { users: [] };
-let users = db.users;
+const db = {
+  users: [
+    {
+      id: 'd1b32554-7fa7-4530-9aa6-5e33edfcc2b9',
+      email: 'test@gmail.com',
+      password: 'test@123',
+    },
+  ],
+};
+let users = _.cloneDeep(db.users);
 
 @Injectable()
 export class UserService {
@@ -31,6 +39,6 @@ export class UserService {
   }
 
   deleteAll() {
-    users = [];
+    users = _.cloneDeep(db.users);
   }
 }
