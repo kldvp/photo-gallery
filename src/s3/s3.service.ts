@@ -48,7 +48,7 @@ export class S3Service {
       key: fileName,
       filename: file.originalname,
       uploadedAt: Date.now(),
-      userId: request['user']?.userId,
+      userId: request['user']?.id,
     };
     this.galleryService.add(uploadedFileInfo);
 

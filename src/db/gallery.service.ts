@@ -1,13 +1,10 @@
 import { Injectable } from '@nestjs/common';
-// import * as Loki from 'lokijs';
 import { v4 as uuidv4 } from 'uuid';
 import * as _ from 'lodash';
 
-// const db = new Loki('data.db', { persistenceMethod: 'memory' });
-// const gallery = db.addCollection('gallery', { disableMeta: true });
-
+// in memory db
 const db = { gallery: [] };
-const gallery = db.gallery;
+let gallery = db.gallery;
 
 @Injectable()
 export class GalleryService {
@@ -30,5 +27,9 @@ export class GalleryService {
     record.id = uuidv4();
     gallery.push(record);
     return record;
+  }
+
+  deleteAll() {
+    gallery = [];
   }
 }

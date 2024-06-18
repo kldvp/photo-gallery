@@ -12,6 +12,7 @@ import {
   Injectable,
   Scope,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { UserService } from './db/user.service';
@@ -40,7 +41,6 @@ export class AppController {
   @UseGuards(AuthGuard)
   @Get()
   async greet() {
-    console.log('user :', this.request['user']);
     const users = this.userService.findAll();
     return users;
   }
@@ -48,7 +48,7 @@ export class AppController {
   @UseGuards(AuthGuard)
   @Get('pics')
   async getAllMyUploadedPictures() {
-    const userId = this.request['user']?.userId;
+    const userId = this.request['user']?.id;
     const pics = this.galleryService.find({ userId });
     if (!pics || !pics.length) {
       return { msg: 'No pics found' };
@@ -88,7 +88,6 @@ export class AppController {
   // user can upload pics
   @UseGuards(AuthGuard)
   @Post('uploadPic')
-  //   @UseInterceptors(FileInterceptor('file'))
   // adding validations
   @UseInterceptors(
     FileInterceptor('file', {
@@ -111,5 +110,19 @@ export class AppController {
     const fileName = `${Date.now()}-${file.originalname}`;
     const url = await this.s3Service.uploadFile(fileName, file, this.request);
     return { url };
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('users')
+  async deleteUsers() {
+    this.userService.deleteAll();
+    return 'success';
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('gallery')
+  async deleteGallery() {
+    this.galleryService.deleteAll();
+    return 'success';
   }
 }
